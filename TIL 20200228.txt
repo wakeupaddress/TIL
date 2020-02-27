@@ -1,0 +1,32 @@
+仮想環境にあるphpファイルがブラウザで表示できないので
+
+Apacheのエラーを確認したところ下記のように表示され、ドキュメントルートの設定が間違ってるのかと推察し、
+
+ 2月 28 02:32:17 localhost.localdomain systemd[1]: Starting The Apache HTTP Server...
+ 2月 28 02:32:19 localhost.localdomain httpd[713]: AH00526: Syntax error on line 119 of /etc/httpd/conf/httpd.conf:
+ 2月 28 02:32:19 localhost.localdomain httpd[713]: DocumentRoot '/var/www/html/public_html' is not a directory, or is not readable
+ 2月 28 02:32:19 localhost.localdomain systemd[1]: httpd.service: main process exited, code=exited, status=1/FAILURE
+ 2月 28 02:32:19 localhost.localdomain kill[818]: kill: cannot find process ""
+ 2月 28 02:32:19 localhost.localdomain systemd[1]: httpd.service: control process exited, code=exited status=1
+ 2月 28 02:32:19 localhost.localdomain systemd[1]: Failed to start The Apache HTTP Server.
+ 2月 28 02:32:19 localhost.localdomain systemd[1]: Unit httpd.service entered failed state.
+ 2月 28 02:32:19 localhost.localdomain systemd[1]: httpd.service failed.
+
+filmdsというディレクトリのvagrantfileのDocumentrootを
+
+/var/www/html から
+/var/www/html/public_htmlに変更した
+
+その後、vagrantを再起動し、あらためてブラウザでの表示を試みたが失敗した
+
+心当たりがほかになかった為、rootユーザーからhttpd.serviceをrestartしたところ設定が反映されたのか、phpファイルをブラウザで表示できるようになった
+
+エラーが出ても焦らずstatusを確認しよう、システムを再起動しないと設定が反映されない事を覚えておこう
+
+____________________________________________________________
+
+cssファイルを編集し、変更をブラウザで確認しようとしたところ、更新ボタンを押しても変更が反映されない
+
+調べたところ、cssの情報がキャッシュによりブラウザに保存されているのではないかと考えた
+
+そこで、デベロッパーツールを開きながらブラウザの更新ボタンを右クリックし、キャッシュの消去とハードの再読み込みを行った
